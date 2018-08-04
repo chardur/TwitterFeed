@@ -7,8 +7,8 @@ return [
         'db' => [
             'host' => '67.205.183.11',
             'port' => '3306',
-            'dbname' => 'feed_donstringham',
-            'username' => 'donstringham',
+            'dbname' => 'feed_chardur',
+            'username' => 'chardur',
             'password' => 'changeme'
         ],
         // Monolog settings
@@ -19,7 +19,7 @@ return [
         ],
         // Renderer settings
         'renderer' => [
-            'template_path' => __DIR__ . '/../templates/',
+            'template_path' => __DIR__ . '/../public/',
         ]
     ],
 ];
