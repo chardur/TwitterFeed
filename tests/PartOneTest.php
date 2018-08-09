@@ -46,10 +46,10 @@ class PartOneTest extends TestCase
     {
         $this->_host = '67.205.183.11';
         $this->_port = '3306';
-        $this->_username = 'student';
-        $this->_password = 'letmein';
+        $this->_username = 'chardur';
+        $this->_password = 'changeme';
         $this->_connection = null;
-        $this->_database = 'student';
+        $this->_database = 'feed_chardur';
         $this->_connection = mysqli_connect(
             $this->_host,
             $this->_username,
@@ -87,11 +87,11 @@ class PartOneTest extends TestCase
     public function testSelectAll(): void
     {
         // arrange
-        $query = "SELECT * FROM student.test";
+        $query = "SELECT * FROM feed_chardur.Users";
         // act
         $result = $this->_connection->query($query);
         $row = $result->fetch_row();
         // assert
-        $this->assertEquals('1', $row[0]);
+        $this->assertEquals('2', $row[0]);
     }
 }
