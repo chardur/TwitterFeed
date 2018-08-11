@@ -14,6 +14,7 @@
             color: #aaa;
             font-size: 18px;
         }
+
         h1 {
             color: #719e40;
             letter-spacing: -3px;
@@ -22,8 +23,9 @@
             font-weight: 200;
             margin-bottom: 0;
         }
+
         tr, td {
-            text-align:left;
+            text-align: left;
         }
 
     </style>
@@ -31,37 +33,15 @@
 <body>
 <img src="../public/tweetaway.png" height="220" width="260"/>
 <h1>Tweet Away</h1>
-<div>A web social media application to waste away time!</div><br>
+<div>A web social media application to waste away time!</div>
+<br>
 <div>
-    <form action = "/feed/add" method = "POST">
-        User:<input type="text" name="username" id="username" style="width: 10%;">
-        Message:<input type="text" name="message" id="message" maxlength="248" style="width: 60%;">
-        <input type="submit" id="submit" value="Submit"><br>
-    </form>
+    User:<input type="text" name="username" id="username" style="width: 10%;">
+    Message:<input type="text" name="message" id="message" maxlength="248" style="width: 60%;">
+    <button id="add-feed">Add Post</button><br><br>
 </div>
-<div>
-    <br>
-    <table>
-    <tr><th>User</th><th>Time</th><th>Message</th></tr>
-
-    <?php
-    $style = "style='text-align:left;'";
-    foreach ($args['feed'] as $row){
-        echo "<tr>";
-        echo "<td>".$row['name']."</td>";
-        echo "<td>".$row['time']."</td>";
-        echo "<td><p>".$row['message']."</p></td>";
-        echo "</tr>";
-    }
-
-    ?>
-    </table>
-</div>
-
 <div>
     <table id="feedTable">
-        <tr><th>User</th><th>Time</th><th>Message</th></tr>
-
     </table>
 </div>
 <?php if (isset($name)) : ?>
@@ -70,5 +50,45 @@
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="main.js"></script>
+<script>
+    $(document).ready(function () {
+
+        var $feedTable = $('#feedTable');
+        var $username = $('#username');
+        var $message = $('#message');
+        $.ajax({
+            type: 'GET',
+            url: '/feed',
+            success: function ($Data) {
+                $.each(JSON.parse($Data), function (i, feedItem) {
+                    $feedTable.append('<tr><th>' + feedItem.name + '</th><th>' + feedItem.time + '</th><th>' + feedItem.message + '</th></tr>');
+                });
+            },
+            error: function () {
+                alert('error loading feed');
+            }
+        });
+
+        $('#add-feed').on('click', function () {
+            var feed = {
+                username: $username.val(),
+                message: $message.val(),
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/feed/add',
+                data: feed,
+                success: function ($newFeed) {
+                    var parseFeed = JSON.parse($newFeed);
+                    $feedTable.prepend('<tr><th>' + parseFeed.name + '</th><th>' + parseFeed.time + '</th><th>' + parseFeed.message + '</th></tr>');
+
+                },
+                error: function () {
+                    alert('error adding feed');
+                }
+            });
+        });
+
+    });
+</script>
 </html>

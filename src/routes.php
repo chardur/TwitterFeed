@@ -34,9 +34,24 @@ $app->post('/feed/add', function (Request $request, Response $response) {
     $insertMsg = $conn->prepare($sql);
     $insertMsg->execute([$message, $id]);
 
+    $MsgidQuery = $conn->prepare("SELECT LAST_INSERT_ID()");
+    $MsgidQuery->execute();
+    $Msgid = $MsgidQuery->fetchColumn();
+
+    $timeQuery = $conn->prepare("SELECT time from feed_chardur.Messages where messageId = $Msgid");
+    $timeQuery->execute();
+    $time = $timeQuery->fetchColumn();
+
     $sql = "insert into feed_chardur.Ips (ip, userID) values (?,?)";
     $insertMsg = $conn->prepare($sql);
     $insertMsg->execute([$ip, $id]);
+
+    $newFeed = [];
+    $newFeed['name'] = $name;
+    $newFeed['time'] = $time;
+    $newFeed['message'] = $message;
+
+    echo json_encode($newFeed);
 
     return $response;
 
@@ -44,7 +59,7 @@ $app->post('/feed/add', function (Request $request, Response $response) {
 
 $app->get('/feed', function (Request $request, Response $response, array $args) {
     // Sample log message
-    $this->logger->info("tweet-away '/' route");
+    $this->logger->info("tweet-away '/feed' route");
     // Render index view
 
     try {
@@ -61,10 +76,10 @@ $app->get('/feed', function (Request $request, Response $response, array $args) 
 
     $queryFeed = $conn->prepare(" select name, time, message from Users inner join Messages on Users.userID = Messages.userID order by time desc ");
     $queryFeed->execute();
-//    $feed = $queryFeed->fetchAll();
     $args['feed'] = $queryFeed->fetchAll();
-    $response->getBody()->write(var_export($args['feed'], true));
-    print_r($args['feed']);
+    //$response->getBody()->write(var_export($args['feed'], true));
+    //$response->body(json_encode($args['feed']));
+    echo json_encode($args['feed']);
     return $response;
 });
 
