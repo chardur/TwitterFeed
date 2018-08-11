@@ -8,11 +8,11 @@ $container['renderer'] = function() use ($container) {
 };
 // database
 $container['db'] = function() use ($container) {
-    $settings = $container->get('settings')['db'];
-    $dsn = 'mysql:dbname='.$settings['dbname'].
-        'host='.$settings['host'].
-        'port='.$settings['port'];
-    $db = new \PDO($dsn, $settings['username'], $settings['password']);
+    $servername = "67.205.183.11";
+    $username = "chardur";
+    $password = "changeme";
+    $db = new PDO("mysql:host=$servername;dbname=feed_chardur", $username, $password);
+
     return $db;
 };
 // monolog

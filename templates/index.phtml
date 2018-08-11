@@ -27,8 +27,31 @@
 <body>
 <img src="../public/tweetaway.png" height="220" width="260"/>
 <h1>Tweet Away</h1>
-<div>A web social media application to waste away time!</div>
+<div>A web social media application to waste away time!</div><br>
+<div>
+    <form action = "../" method = post>
+        User:<input type="text" name="username" style="width: 10%;">
+        Message:<input type="text" name="message" style="width: 60%;">
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div>
+    <h3>Feed: </h3><br>
+    <table>
+    <tr><th>Name</th><th>Time</th><th>Message</th></tr>
 
+    <?php
+    foreach ($args['feed'] as $row){
+        echo "<tr>";
+        echo "<td>".$row['name']."</td>";
+        echo "<td>".$row['time']."</td>";
+        echo "<td>".$row['message']."</td>";
+        echo "</tr>";
+    }
+
+    ?>
+    </table>
+</div>
 <?php if (isset($name)) : ?>
     <h2>Hello <?= htmlspecialchars($name); ?>!</h2>
 <?php endif; ?>
