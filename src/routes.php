@@ -4,18 +4,17 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 // Routes
+$app->post('/feed/add', function (Request $request, Response $response) {
+    $data = $request->getParsedBody();
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $name = filter_var($data['username'], FILTER_SANITIZE_STRING);
+    $message = filter_var($data['message'], FILTER_SANITIZE_STRING);
 
-/*$app->get('/feed', function (Request $request, Response $response, array $args) {
-    // Sample log message
-    $this->logger->info("tweet-away '/feed' route");
-    // Render index view
-
-    echo "the feed route is working";
     try {
         $conn = $this->db;
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        echo "Connected successfully";
+        //echo "Connected successfully";
 
     }
     catch(PDOException $e)
@@ -23,14 +22,51 @@ use Slim\Http\Response;
         echo "Connection failed: " . $e->getMessage();
     }
 
-    $queryUsers = $conn->prepare(" Select * FROM feed_chardur.Users ");
-    $queryUsers->execute();
-    $users = $queryUsers->fetchAll();
+    $sql = "INSERT INTO feed_chardur.Users (name) VALUES (?)";
+    $insertName = $conn->prepare($sql);
+    $insertName->execute([$name]);
 
-    print_r($users);
+    $idQuery = $conn->prepare("SELECT LAST_INSERT_ID()");
+    $idQuery->execute();
+    $id = $idQuery->fetchColumn();
+
+    $sql = "insert into feed_chardur.Messages (message, userID, time) values (?,?,current_timestamp())";
+    $insertMsg = $conn->prepare($sql);
+    $insertMsg->execute([$message, $id]);
+
+    $sql = "insert into feed_chardur.Ips (ip, userID) values (?,?)";
+    $insertMsg = $conn->prepare($sql);
+    $insertMsg->execute([$ip, $id]);
+
     return $response;
 
-});*/
+});
+
+$app->get('/feed', function (Request $request, Response $response, array $args) {
+    // Sample log message
+    $this->logger->info("tweet-away '/' route");
+    // Render index view
+
+    try {
+        $conn = $this->db;
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        //echo "Connected successfully";
+
+    }
+    catch(PDOException $e)
+    {
+        echo "Connection failed: " . $e->getMessage();
+    }
+
+    $queryFeed = $conn->prepare(" select name, time, message from Users inner join Messages on Users.userID = Messages.userID order by time desc ");
+    $queryFeed->execute();
+//    $feed = $queryFeed->fetchAll();
+    $args['feed'] = $queryFeed->fetchAll();
+    $response->getBody()->write(var_export($args['feed'], true));
+    print_r($args['feed']);
+    return $response;
+});
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message

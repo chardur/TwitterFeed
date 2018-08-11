@@ -22,6 +22,10 @@
             font-weight: 200;
             margin-bottom: 0;
         }
+        tr, td {
+            text-align:left;
+        }
+
     </style>
 </head>
 <body>
@@ -29,27 +33,35 @@
 <h1>Tweet Away</h1>
 <div>A web social media application to waste away time!</div><br>
 <div>
-    <form action = "../" method = post>
-        User:<input type="text" name="username" style="width: 10%;">
-        Message:<input type="text" name="message" style="width: 60%;">
-        <input type="submit" value="Submit">
+    <form action = "/feed/add" method = "POST">
+        User:<input type="text" name="username" id="username" style="width: 10%;">
+        Message:<input type="text" name="message" id="message" maxlength="248" style="width: 60%;">
+        <input type="submit" id="submit" value="Submit"><br>
     </form>
 </div>
 <div>
-    <h3>Feed: </h3><br>
+    <br>
     <table>
-    <tr><th>Name</th><th>Time</th><th>Message</th></tr>
+    <tr><th>User</th><th>Time</th><th>Message</th></tr>
 
     <?php
+    $style = "style='text-align:left;'";
     foreach ($args['feed'] as $row){
         echo "<tr>";
         echo "<td>".$row['name']."</td>";
         echo "<td>".$row['time']."</td>";
-        echo "<td>".$row['message']."</td>";
+        echo "<td><p>".$row['message']."</p></td>";
         echo "</tr>";
     }
 
     ?>
+    </table>
+</div>
+
+<div>
+    <table id="feedTable">
+        <tr><th>User</th><th>Time</th><th>Message</th></tr>
+
     </table>
 </div>
 <?php if (isset($name)) : ?>
@@ -57,4 +69,6 @@
 <?php endif; ?>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="main.js"></script>
 </html>
