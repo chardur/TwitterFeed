@@ -94,4 +94,30 @@ class PartOneTest extends TestCase
         // assert
         $this->assertEquals('2', $row[0]);
     }
+
+    public function testPost(): void
+    {
+
+        $sql = "INSERT INTO feed_chardur.Users (name) values ('unitTest')";
+        if ($this->_connection->query($sql) === TRUE) {
+            $result = TRUE;
+        } else {
+            $result = FALSE;
+        }
+        $this->assertEquals(TRUE, $result);
+
+    }
+
+    public function testGet(): void
+    {
+        $sql = "SELECT LAST_INSERT_ID()";
+        $result = $this->_connection->query($sql);
+        if($result->num_rows > 0){
+            $test = TRUE;
+        }else{
+            $test = FALSE;
+        }
+        $this->assertEquals(TRUE, $test);
+    }
+
 }

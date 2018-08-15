@@ -5,6 +5,9 @@ use Slim\Http\Response;
 
 // Routes
 $app->post('/feed/add', function (Request $request, Response $response) {
+
+    $this->logger->info("tweet-away '/feed/add' route");
+
     $data = $request->getParsedBody();
     $ip = $_SERVER['REMOTE_ADDR'];
     $name = filter_var($data['username'], FILTER_SANITIZE_STRING);
@@ -14,7 +17,6 @@ $app->post('/feed/add', function (Request $request, Response $response) {
         $conn = $this->db;
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //echo "Connected successfully";
 
     }
     catch(PDOException $e)
@@ -66,7 +68,6 @@ $app->get('/feed', function (Request $request, Response $response, array $args) 
         $conn = $this->db;
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //echo "Connected successfully";
 
     }
     catch(PDOException $e)
@@ -77,8 +78,6 @@ $app->get('/feed', function (Request $request, Response $response, array $args) 
     $queryFeed = $conn->prepare(" select name, time, message from Users inner join Messages on Users.userID = Messages.userID order by time desc ");
     $queryFeed->execute();
     $args['feed'] = $queryFeed->fetchAll();
-    //$response->getBody()->write(var_export($args['feed'], true));
-    //$response->body(json_encode($args['feed']));
     echo json_encode($args['feed']);
     return $response;
 });
@@ -87,23 +86,6 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     // Sample log message
     $this->logger->info("tweet-away '/' route");
     // Render index view
-
-    try {
-        $conn = $this->db;
-        // set the PDO error mode to exception
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        //echo "Connected successfully";
-
-    }
-    catch(PDOException $e)
-    {
-        echo "Connection failed: " . $e->getMessage();
-    }
-
-    $queryFeed = $conn->prepare(" select name, time, message from Users inner join Messages on Users.userID = Messages.userID order by time desc ");
-    $queryFeed->execute();
-//    $feed = $queryFeed->fetchAll();
-    $args['feed'] = $queryFeed->fetchAll();
 
     return $this->renderer->render($response, 'index.phtml', ['args'=>$args]);
 });
