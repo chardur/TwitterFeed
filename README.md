@@ -1,7 +1,7 @@
-# HW05 Multiple User Feed
+# HW05 Multiple User Feed using PHP, Slim, GuzzleHTTP
 
 ## <Charles Durfee>
-
+![](/picture.jpg)
 ### Initial Setup
 
 * Run `composer install`.
