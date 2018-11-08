@@ -5,11 +5,11 @@
 ### Initial Setup
 
 * Run `composer install`.
-* MySQL Host: 67.205.183.11
+* MySQL Host: removed
 * MySQL Port: 3306
 * MySQL Database Name: feed_<weber state username> 
-* MySQL Username: <weber state username>
-* MySQL Password: changeme
+* MySQL Username: removed
+* MySQL Password: removed
 
 ### Problem Statement
 
