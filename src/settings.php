@@ -5,11 +5,11 @@ return [
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
         // Database settings
         'db' => [
-            'host' => '67.205.183.11',
+            'host' => 'removed',
             'port' => '3306',
             'dbname' => 'feed_chardur',
-            'username' => 'chardur',
-            'password' => 'changeme'
+            'username' => 'removed',
+            'password' => 'removed'
         ],
         // Monolog settings
         'logger' => [
